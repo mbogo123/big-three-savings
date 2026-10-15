@@ -12,6 +12,7 @@
   <link rel="apple-touch-icon" href="static/icons/icon-192.png">
   <title>BIG THREE</title>
   <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
   <style>
     :root {
       --purple: #7c3aed;
@@ -283,6 +284,14 @@
       object-fit: cover;
       display: block;
     }
+    .bal-card.dividends .avatar {
+      background: #ecfdf5;
+      border-color: rgba(255,255,255,0.7);
+      padding: 6px;
+    }
+    .bal-card.dividends .avatar img {
+      object-fit: contain;
+    }
     .bal-card .name { font-weight: 800; font-size: 0.88rem; opacity: 0.95; }
     .bal-card .amt { font-size: 1.3rem; font-weight: 900; }
     .bal-card a {
@@ -375,6 +384,101 @@
     .stmt-summary .total { font-size: 2rem; font-weight: 900; margin-top: 0.25rem; color: #0f172a; }
 
 
+
+    /* ========== QUOTE TICKER ========== */
+    .quote-ticker {
+      background: linear-gradient(90deg, #4c1d95, #7c3aed, #db2777, #f97316, #4c1d95);
+      background-size: 300% 100%;
+      animation: tickerBg 12s linear infinite;
+      color: white;
+      overflow: hidden;
+      white-space: nowrap;
+      padding: 0.55rem 0;
+      margin-bottom: 1rem;
+      border-radius: 0.85rem;
+      box-shadow: 0 4px 16px rgba(76,29,149,0.25);
+    }
+    @keyframes tickerBg {
+      0% { background-position: 0% 50%; }
+      100% { background-position: 100% 50%; }
+    }
+    .quote-track {
+      display: inline-block;
+      padding-left: 100%;
+      animation: marquee 35s linear infinite;
+      font-size: 0.82rem;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+    }
+    .quote-track span {
+      margin-right: 3.5rem;
+      opacity: 0.95;
+    }
+    @keyframes marquee {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-100%); }
+    }
+
+    /* ========== CHART SECTION ========== */
+    .charts-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.85rem;
+      margin-bottom: 1.25rem;
+    }
+    .chart-card {
+      background: white;
+      border-radius: 1.15rem;
+      padding: 1rem 0.85rem 0.75rem;
+      box-shadow: 0 4px 18px rgba(0,0,0,0.06);
+      border: 1px solid #e2e8f0;
+    }
+    .chart-card h3 {
+      font-size: 0.82rem;
+      font-weight: 800;
+      color: #475569;
+      margin-bottom: 0.6rem;
+      text-align: center;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .chart-wrap {
+      position: relative;
+      height: 180px;
+    }
+
+    /* Multi-color section variants */
+    section.section-purple {
+      background: linear-gradient(165deg, #f5f3ff 0%, #ede9fe 40%, #ffffff 100%);
+      border-top: 4px solid #7c3aed;
+    }
+    section.section-green {
+      background: linear-gradient(165deg, #ecfdf5 0%, #d1fae5 40%, #ffffff 100%);
+      border-top: 4px solid #059669;
+    }
+    section.section-pink {
+      background: linear-gradient(165deg, #fdf2f8 0%, #fce7f3 40%, #ffffff 100%);
+      border-top: 4px solid #db2777;
+    }
+    section.section-orange {
+      background: linear-gradient(165deg, #fff7ed 0%, #ffedd5 40%, #ffffff 100%);
+      border-top: 4px solid #f97316;
+    }
+    section.section-blue {
+      background: linear-gradient(165deg, #eff6ff 0%, #dbeafe 40%, #ffffff 100%);
+      border-top: 4px solid #2563eb;
+    }
+
+    body {
+      background: linear-gradient(160deg, #ede9fe 0%, #fce7f3 30%, #ffedd5 60%, #d1fae5 100%);
+      background-attachment: fixed;
+    }
+
+    @media (max-width: 560px) {
+      .charts-grid { grid-template-columns: 1fr; }
+      .chart-wrap { height: 200px; }
+    }
+
     /* ========== FOOTER ========== */
     .site-footer {
       text-align: center;
@@ -448,6 +552,20 @@
     </div>
   </header>
   <main>
+    <!-- Running money quotes -->
+    <div class="quote-ticker">
+      <div class="quote-track" id="quote-track">
+        <span>"The art of spending money is to spend less than you earn."</span>
+        <span>"Do not save what is left after spending; spend what is left after saving." — Warren Buffett</span>
+        <span>"A penny saved is a penny earned." — Benjamin Franklin</span>
+        <span>"Wealth is the ability to fully experience life." — Henry David Thoreau</span>
+        <span>"It's not how much money you make, but how much money you keep."</span>
+        <span>"The goal isn't more money. The goal is living life on your terms."</span>
+        <span>"Savings · Growth · Future — that is the BIG THREE way."</span>
+        <span>"Beware of little expenses; a small leak will sink a great ship." — Franklin</span>
+      </div>
+    </div>
+
     <!-- Tagline -->
     <div class="tagline-banner">
       <span>Savings · Growth · Future</span>
@@ -461,6 +579,18 @@
     </div>
 
     <div class="balances" id="balances"></div>
+
+    <!-- Progress charts -->
+    <div class="charts-grid">
+      <div class="chart-card">
+        <h3>Contribution Share</h3>
+        <div class="chart-wrap"><canvas id="chart-pie"></canvas></div>
+      </div>
+      <div class="chart-card">
+        <h3>Progress by Member</h3>
+        <div class="chart-wrap"><canvas id="chart-bar"></canvas></div>
+      </div>
+    </div>
 
     <div id="admin-forms" class="hidden">
       <section class="section-purple">
@@ -498,7 +628,7 @@
       </section>
     </div>
 
-    <section class="section-green">
+    <section class="section-orange">
       <h2>
         📜 All Contributions
         <span class="badge badge-green" id="c-count">0</span>
@@ -604,16 +734,78 @@ const MONTHLY = 10000;
 const API = "/api";
 
 const AVATAR_URLS = {
-  TERESIA: "https://api.dicebear.com/7.x/avataaars/svg?seed=Teresia&backgroundColor=b6e3f4",
-  BRAYAN: "https://api.dicebear.com/7.x/avataaars/svg?seed=Brayan&backgroundColor=c0aede",
-  MARY: "https://api.dicebear.com/7.x/avataaars/svg?seed=Mary&backgroundColor=ffd5dc",
-  DIVIDENDS: "https://api.dicebear.com/7.x/avataaars/svg?seed=Dividends&backgroundColor=d1f4e0"
+  // Real human faces (fixed portraits)
+  TERESIA: "https://randomuser.me/api/portraits/women/44.jpg",
+  BRAYAN:  "https://randomuser.me/api/portraits/men/32.jpg",
+  MARY:    "https://randomuser.me/api/portraits/women/68.jpg",
+  // Paper money for dividends
+  DIVIDENDS: "https://cdn-icons-png.flaticon.com/512/2489/2489756.png"
 };
 
 let session = null;
 let editCtx = null;
 let pollTimer = null;
 let cachedData = null;
+let pieChart = null;
+let barChart = null;
+
+function updateCharts(totals) {
+  if (typeof Chart === "undefined") return;
+  const labels = ["TERESIA", "BRAYAN", "MARY", "DIVIDENDS"];
+  const colors = ["#7c3aed", "#059669", "#d97706", "#0d9488"];
+  const data = labels.map(m => totals[m] || 0);
+
+  const pieCtx = document.getElementById("chart-pie");
+  const barCtx = document.getElementById("chart-bar");
+  if (!pieCtx || !barCtx) return;
+
+  if (pieChart) pieChart.destroy();
+  if (barChart) barChart.destroy();
+
+  pieChart = new Chart(pieCtx, {
+    type: "doughnut",
+    data: {
+      labels,
+      datasets: [{
+        data,
+        backgroundColor: colors,
+        borderWidth: 2,
+        borderColor: "#fff"
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { position: "bottom", labels: { boxWidth: 12, font: { size: 10 } } }
+      }
+    }
+  });
+
+  barChart = new Chart(barCtx, {
+    type: "bar",
+    data: {
+      labels,
+      datasets: [{
+        label: "Total",
+        data,
+        backgroundColor: colors,
+        borderRadius: 8,
+        maxBarThickness: 36
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: {
+        y: { beginAtZero: true, ticks: { font: { size: 10 } } },
+        x: { ticks: { font: { size: 10 } } }
+      }
+    }
+  });
+}
+
 
 function fmt(n) {
   return Number(n).toLocaleString("en-US", { maximumFractionDigits: 0 });
@@ -782,6 +974,9 @@ function renderDash(db) {
         <button class="btn-del" onclick="delContribution(${c.id})">Del</button>` : ""}</td>
     </tr>`).join("");
   }
+
+  // Update progress graphs
+  updateCharts(totals);
 }
 
 async function addContribution() {
@@ -1015,4 +1210,3 @@ tryRestoreSession();
 </script>
 </body>
 </html>
-
