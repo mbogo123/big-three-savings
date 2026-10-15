@@ -70,3 +70,4 @@ Then open http://localhost:3000
 - Keep your Turso token private
 
 Enjoy the shared BIG THREE circle! 🟣🩷🧡
+
