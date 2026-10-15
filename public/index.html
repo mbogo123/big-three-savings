@@ -268,14 +268,20 @@
     .bal-card.mary    { background: linear-gradient(160deg, #d97706, #b45309); }
     .bal-card.dividends { background: linear-gradient(160deg, #0d9488, #0f766e); }
     .avatar {
-      width: 48px; height: 48px;
+      width: 52px; height: 52px;
       border-radius: 50%;
       background: rgba(255,255,255,0.25);
-      border: 2px solid rgba(255,255,255,0.5);
+      border: 2.5px solid rgba(255,255,255,0.55);
       display: flex; align-items: center; justify-content: center;
-      font-weight: 800; font-size: 1.05rem;
-      letter-spacing: 0.02em;
-      margin-bottom: 0.15rem;
+      overflow: hidden;
+      margin-bottom: 0.2rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    }
+    .avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
     }
     .bal-card .name { font-weight: 800; font-size: 0.88rem; opacity: 0.95; }
     .bal-card .amt { font-size: 1.3rem; font-weight: 900; }
@@ -367,6 +373,34 @@
     }
     .stmt-summary .name { font-weight: 800; font-size: 1.1rem; color: #0f766e; }
     .stmt-summary .total { font-size: 2rem; font-weight: 900; margin-top: 0.25rem; color: #0f172a; }
+
+
+    /* ========== FOOTER ========== */
+    .site-footer {
+      text-align: center;
+      padding: 1.4rem 1rem 1.75rem;
+      margin-top: 0.5rem;
+      color: #94a3b8;
+      font-size: 0.78rem;
+      line-height: 1.55;
+    }
+    .site-footer .brand {
+      font-weight: 800;
+      color: #64748b;
+      letter-spacing: 0.06em;
+      margin-bottom: 0.25rem;
+    }
+    .site-footer .tag {
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      font-size: 0.7rem;
+      color: #a78bfa;
+      margin-bottom: 0.35rem;
+    }
+    .site-footer .copy {
+      color: #94a3b8;
+    }
 
     @media (max-width: 520px) {
       .balances { grid-template-columns: 1fr 1fr; }
@@ -485,6 +519,13 @@
       </div>
       <p class="empty hidden" id="c-empty">No contributions yet.</p>
     </section>
+
+    <footer class="site-footer">
+      <div class="brand">BIG THREE</div>
+      <div class="tag">Savings · Growth · Future</div>
+      <div class="copy">© 2026 · Private contribution circle</div>
+    </footer>
+
   </main>
 </div>
 
@@ -516,6 +557,13 @@
       </div>
       <p class="empty hidden" id="stmt-empty">No records yet.</p>
     </section>
+
+    <footer class="site-footer">
+      <div class="brand">BIG THREE</div>
+      <div class="tag">Savings · Growth · Future</div>
+      <div class="copy">© 2026 · Private contribution circle</div>
+    </footer>
+
   </main>
 </div>
 
@@ -555,11 +603,11 @@ const ALL_CATEGORIES = ["TERESIA", "BRAYAN", "MARY", "DIVIDENDS"];
 const MONTHLY = 10000;
 const API = "/api";
 
-const AVATAR_INITIALS = {
-  TERESIA: "T",
-  BRAYAN: "B",
-  MARY: "M",
-  DIVIDENDS: "D"
+const AVATAR_URLS = {
+  TERESIA: "https://api.dicebear.com/7.x/avataaars/svg?seed=Teresia&backgroundColor=b6e3f4",
+  BRAYAN: "https://api.dicebear.com/7.x/avataaars/svg?seed=Brayan&backgroundColor=c0aede",
+  MARY: "https://api.dicebear.com/7.x/avataaars/svg?seed=Mary&backgroundColor=ffd5dc",
+  DIVIDENDS: "https://api.dicebear.com/7.x/avataaars/svg?seed=Dividends&backgroundColor=d1f4e0"
 };
 
 let session = null;
@@ -704,9 +752,9 @@ function renderDash(db) {
   document.getElementById("balances").innerHTML = ALL_CATEGORIES.map(m => {
     const isDividend = m === "DIVIDENDS";
     const canView = isAdmin() || session.user === m;
-    const initial = AVATAR_INITIALS[m] || m[0];
+    const faceUrl = AVATAR_URLS[m] || ("https://api.dicebear.com/7.x/avataaars/svg?seed=" + encodeURIComponent(m));
     return `<div class="bal-card ${m.toLowerCase()}">
-      <div class="avatar">${initial}</div>
+      <div class="avatar"><img src="${faceUrl}" alt="${m}" /></div>
       <div class="name">${isDividend ? "DIVIDENDS" : m}</div>
       <div class="amt">${fmt(totals[m] || 0)}</div>
       ${canView ? `<a onclick="showStatement('${m}')">View statement →</a>` : ""}
