@@ -13,6 +13,7 @@ const TURSO_URL = process.env.TURSO_DATABASE_URL || "libsql://big-three-mbogo123
 const TURSO_TOKEN = process.env.TURSO_AUTH_TOKEN || "eyJhbGciOiJFZERTQSIsInR5cCI6IkpXVCJ9.eyJhIjoicnciLCJpYXQiOjE3OTE5ODU0MjgsImlkIjoiMDFhMTNhYTUtMGMwMS03MjQzLWExZTQtMDAyMDkyZjRjY2EyIiwia2lkIjoieWZaZnkyRUtPenNyUlF4RFBZMnhiNnJGRk15UkFPZ2FCQXR0X2p0dkFyMCIsInJpZCI6ImVkOTA5YTI1LTQyMTYtNGFlMy04MTk5LTU2YWFiMjAxZWExNCJ9.jQprHUtF3aMNdJONPyS0Z1xMlasw76bUj5Ir9zgTpfagWumW5SoqTPGCCuQwt5qNN5Tb5CHUClwSEynmNp86AQ";
 
 const MEMBERS = ["TERESIA", "BRAYAN", "MARY"];
+const ALL_CATEGORIES = ["TERESIA", "BRAYAN", "MARY", "DIVIDENDS"];
 const DEFAULT_USERS = [
   { name: "TERESIA", password: "teresia-admin", role: "admin" },
   { name: "BRAYAN",  password: "brayan123",     role: "member" },
@@ -242,7 +243,7 @@ async function handleAPI(req, res, pathname) {
       return sendJSON(res, 403, { error: "Admin only." });
     }
     const body = await readBody(req);
-    if (!body.member || !MEMBERS.includes(body.member)) {
+    if (!body.member || !ALL_CATEGORIES.includes(body.member)) {
       return sendJSON(res, 400, { error: "Invalid member" });
     }
     const amount = Number(body.amount) || 10000;
@@ -286,7 +287,7 @@ async function handleAPI(req, res, pathname) {
         return sendJSON(res, 404, { error: "Not found" });
       }
 
-      const member = body.member && MEMBERS.includes(body.member) ? body.member : null;
+      const member = body.member && ALL_CATEGORIES.includes(body.member) ? body.member : null;
       const amount = body.amount !== undefined ? Number(body.amount) : null;
       const date = body.date || null;
       const notes = body.notes !== undefined ? (body.notes || "").toString() : null;
