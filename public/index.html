@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <meta name="theme-color" content="#7c3aed">
+  <meta name="theme-color" content="#5b21b6">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="BIG 3">
@@ -11,317 +11,368 @@
   <link rel="icon" type="image/png" href="static/icons/icon-192.png">
   <link rel="apple-touch-icon" href="static/icons/icon-192.png">
   <title>BIG THREE</title>
+  <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
   <style>
     :root {
       --purple: #7c3aed;
+      --purple-dark: #5b21b6;
       --pink: #db2777;
       --orange: #f97316;
       --green: #059669;
       --teal: #0d9488;
       --blue: #2563eb;
       --amber: #d97706;
+      --slate: #0f172a;
+      --muted: #64748b;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
-      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      font-family: 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
       min-height: 100vh;
-      color: #1e1b4b;
-      background: linear-gradient(160deg, #ede9fe 0%, #fce7f3 35%, #ffedd5 70%, #d1fae5 100%);
-      background-attachment: fixed;
+      color: var(--slate);
+      background: #f1f5f9;
     }
     .hidden { display: none !important; }
 
-    /* ========== LOGIN ========== */
+    /* ========== LOGIN (Professional) ========== */
     #login-view {
       min-height: 100vh;
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 1.25rem;
-      background: linear-gradient(135deg, #c4b5fd 0%, #7c3aed 25%, #db2777 55%, #f97316 85%, #fbbf24 100%);
-      background-size: 400% 400%;
-      animation: gradientMove 14s ease infinite;
+      padding: 1.5rem;
+      background: linear-gradient(145deg, #1e1b4b 0%, #4c1d95 40%, #7c3aed 70%, #a855f7 100%);
+      position: relative;
+      overflow: hidden;
     }
-    @keyframes gradientMove {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
+    #login-view::before {
+      content: '';
+      position: absolute;
+      width: 480px; height: 480px;
+      background: radial-gradient(circle, rgba(255,255,255,0.08) 0%, transparent 70%);
+      top: -120px; right: -80px;
+      pointer-events: none;
+    }
+    #login-view::after {
+      content: '';
+      position: absolute;
+      width: 360px; height: 360px;
+      background: radial-gradient(circle, rgba(251,191,36,0.12) 0%, transparent 70%);
+      bottom: -80px; left: -60px;
+      pointer-events: none;
     }
     .login-card {
-      background: rgba(255,255,255,0.96);
-      border-radius: 1.85rem;
-      padding: 2.25rem 1.75rem;
+      background: #ffffff;
+      border-radius: 1.5rem;
+      padding: 2.5rem 2rem;
       width: 100%;
-      max-width: 390px;
-      box-shadow: 0 30px 60px -12px rgba(0,0,0,0.4), 0 0 0 1px rgba(255,255,255,0.4);
+      max-width: 400px;
+      box-shadow: 0 25px 50px -12px rgba(0,0,0,0.35);
       text-align: center;
-      backdrop-filter: blur(16px);
+      position: relative;
+      z-index: 1;
+    }
+    .login-brand {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 1.75rem;
     }
     .icon-3 {
-      width: 80px; height: 80px;
-      margin: 0 auto 1rem;
-      border-radius: 22px;
-      background: linear-gradient(135deg, #7c3aed, #db2777, #f97316);
+      width: 72px; height: 72px;
+      border-radius: 20px;
+      background: linear-gradient(135deg, #7c3aed, #db2777);
       display: flex; align-items: center; justify-content: center;
-      font-size: 2.6rem; font-weight: 900; color: white;
-      box-shadow: 0 12px 28px rgba(124,58,237,0.5);
+      font-size: 2.4rem; font-weight: 900; color: white;
+      box-shadow: 0 10px 25px rgba(124,58,237,0.4);
+      margin-bottom: 1rem;
     }
     .logo {
-      font-size: 1.95rem; font-weight: 800;
-      background: linear-gradient(90deg, #7c3aed, #db2777, #f97316);
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-      letter-spacing: 0.06em; margin-bottom: 0.2rem;
+      font-size: 1.75rem; font-weight: 800;
+      color: #1e1b4b;
+      letter-spacing: 0.04em;
+      margin-bottom: 0.25rem;
     }
-    .subtitle { color: #6b7280; font-size: 0.92rem; margin-bottom: 1.35rem; }
+    .login-tagline {
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: #7c3aed;
+      margin-bottom: 0.35rem;
+    }
+    .subtitle {
+      color: #64748b;
+      font-size: 0.9rem;
+    }
+    .login-divider {
+      height: 1px;
+      background: #e2e8f0;
+      margin: 1.5rem 0 1.25rem;
+    }
     label {
-      display: block; text-align: left; font-size: 0.8rem; font-weight: 700;
-      color: #5b21b6; margin-bottom: 0.3rem;
+      display: block; text-align: left; font-size: 0.78rem; font-weight: 700;
+      color: #475569; margin-bottom: 0.35rem; text-transform: uppercase; letter-spacing: 0.04em;
     }
     select, input[type="password"], input[type="text"], input[type="number"], input[type="date"] {
       width: 100%; padding: 0.85rem 1rem;
-      border: 2px solid #e9d5ff; border-radius: 0.9rem;
-      font-size: 1.05rem; margin-bottom: 1rem; background: #faf5ff;
+      border: 1.5px solid #e2e8f0; border-radius: 0.75rem;
+      font-size: 1rem; margin-bottom: 1rem; background: #f8fafc;
+      color: #0f172a;
       transition: border-color 0.2s, box-shadow 0.2s;
     }
     select:focus, input:focus {
-      outline: none; border-color: #a78bfa;
-      box-shadow: 0 0 0 4px rgba(167,139,250,0.28);
+      outline: none; border-color: #7c3aed;
+      box-shadow: 0 0 0 3px rgba(124,58,237,0.15);
+      background: #fff;
     }
     .btn {
       width: 100%; padding: 0.95rem;
-      background: linear-gradient(90deg, #7c3aed, #db2777);
-      color: white; border: none; border-radius: 0.9rem;
-      font-size: 1.08rem; font-weight: 700; cursor: pointer;
-      box-shadow: 0 10px 24px rgba(124,58,237,0.4);
+      background: linear-gradient(90deg, #7c3aed, #6d28d9);
+      color: white; border: none; border-radius: 0.75rem;
+      font-size: 1.05rem; font-weight: 700; cursor: pointer;
+      box-shadow: 0 8px 20px rgba(124,58,237,0.35);
       transition: transform 0.15s, box-shadow 0.2s;
     }
+    .btn:hover { box-shadow: 0 10px 28px rgba(124,58,237,0.45); }
     .btn:active { transform: scale(0.98); }
-    .btn-sm { width: auto; padding: 0.55rem 1.1rem; font-size: 0.9rem; }
-    .btn-green { background: linear-gradient(90deg, #059669, #10b981); box-shadow: 0 8px 20px rgba(5,150,105,0.35); }
-    .btn-orange { background: linear-gradient(90deg, #ea580c, #f97316); box-shadow: 0 8px 20px rgba(234,88,12,0.35); }
-    .btn-blue { background: linear-gradient(90deg, #2563eb, #3b82f6); box-shadow: 0 8px 20px rgba(37,99,235,0.35); }
+    .btn-sm { width: auto; padding: 0.55rem 1.15rem; font-size: 0.88rem; }
+    .btn-green { background: linear-gradient(90deg, #059669, #10b981); box-shadow: 0 6px 16px rgba(5,150,105,0.3); }
+    .btn-orange { background: linear-gradient(90deg, #ea580c, #f97316); box-shadow: 0 6px 16px rgba(234,88,12,0.3); }
+    .btn-blue { background: linear-gradient(90deg, #2563eb, #3b82f6); box-shadow: 0 6px 16px rgba(37,99,235,0.3); }
+    .btn-outline {
+      background: transparent; color: #5b21b6; border: 1.5px solid #c4b5fd;
+      box-shadow: none; font-weight: 600;
+    }
+    .btn-outline:hover { background: #f5f3ff; }
     .error {
-      background: linear-gradient(90deg, #fef2f2, #fff1f2); color: #be123c;
-      padding: 0.7rem 1rem; border-radius: 0.7rem; margin-bottom: 1rem;
-      font-size: 0.9rem; border: 1px solid #fecdd3;
+      background: #fef2f2; color: #be123c;
+      padding: 0.7rem 1rem; border-radius: 0.65rem; margin-bottom: 1rem;
+      font-size: 0.88rem; border: 1px solid #fecdd3; text-align: left;
     }
     .success {
-      background: linear-gradient(90deg, #ecfdf5, #f0fdf4); color: #047857;
-      padding: 0.7rem 1rem; border-radius: 0.7rem; margin-bottom: 1rem;
-      font-size: 0.9rem; border: 1px solid #a7f3d0;
+      background: #ecfdf5; color: #047857;
+      padding: 0.7rem 1rem; border-radius: 0.65rem; margin-bottom: 1rem;
+      font-size: 0.88rem; border: 1px solid #a7f3d0; text-align: left;
     }
-    .members-hint { margin-top: 1.3rem; font-size: 0.78rem; color: #a78bfa; font-weight: 600; letter-spacing: 0.04em; }
+    .members-hint {
+      margin-top: 1.4rem; font-size: 0.75rem; color: #94a3b8;
+      font-weight: 500; letter-spacing: 0.03em;
+    }
 
     /* ========== HEADER ========== */
     header {
-      background: linear-gradient(135deg, #7c3aed 0%, #db2777 45%, #f97316 100%);
-      color: white; padding: 1rem 1.2rem;
-      display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.55rem;
-      box-shadow: 0 10px 28px rgba(124,58,237,0.4);
+      background: linear-gradient(135deg, #4c1d95 0%, #7c3aed 50%, #a855f7 100%);
+      color: white; padding: 0.9rem 1.15rem;
+      display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.5rem;
+      box-shadow: 0 4px 20px rgba(76,29,149,0.35);
       position: sticky; top: 0; z-index: 50;
     }
     header h1 {
-      font-size: 1.3rem; font-weight: 800;
+      font-size: 1.2rem; font-weight: 800;
       display: flex; align-items: center; gap: 0.45rem;
     }
     .num3-badge {
       background: white; color: #7c3aed;
-      width: 30px; height: 30px; border-radius: 9px;
+      width: 28px; height: 28px; border-radius: 8px;
       display: inline-flex; align-items: center; justify-content: center;
-      font-weight: 900; font-size: 1.05rem;
+      font-weight: 900; font-size: 1rem;
     }
     .user-badge {
-      background: rgba(255,255,255,0.28); padding: 0.32rem 0.8rem;
-      border-radius: 999px; font-size: 0.84rem; font-weight: 600;
+      background: rgba(255,255,255,0.22); padding: 0.3rem 0.75rem;
+      border-radius: 999px; font-size: 0.82rem; font-weight: 600;
     }
-    .user-badge.admin { background: rgba(253,224,71,0.5); color: #1e1b4b; }
-    .header-actions { display: flex; gap: 0.4rem; flex-wrap: wrap; }
+    .user-badge.admin { background: rgba(253,224,71,0.45); color: #1e1b4b; }
+    .header-actions { display: flex; gap: 0.35rem; flex-wrap: wrap; align-items: center; }
     .header-actions button {
-      background: rgba(255,255,255,0.25); border: none; color: white;
-      padding: 0.4rem 0.75rem; border-radius: 0.55rem;
-      font-size: 0.82rem; font-weight: 600; cursor: pointer;
+      background: rgba(255,255,255,0.2); border: none; color: white;
+      padding: 0.38rem 0.7rem; border-radius: 0.5rem;
+      font-size: 0.8rem; font-weight: 600; cursor: pointer;
     }
-    .header-actions button:active { background: rgba(255,255,255,0.4); }
+    .header-actions button:active { background: rgba(255,255,255,0.35); }
 
-    main { max-width: 740px; margin: 0 auto; padding: 1.25rem 1rem 2.5rem; }
+    main { max-width: 780px; margin: 0 auto; padding: 1.15rem 1rem 2.75rem; }
+
+    /* ========== TAGLINE BANNER ========== */
+    .tagline-banner {
+      text-align: center;
+      margin-bottom: 1.15rem;
+      padding: 0.85rem 1rem;
+      background: white;
+      border-radius: 1rem;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+      border: 1px solid #e2e8f0;
+    }
+    .tagline-banner span {
+      font-size: 0.82rem;
+      font-weight: 800;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      background: linear-gradient(90deg, #7c3aed, #db2777, #f97316);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
 
     /* ========== HERO TOTAL ========== */
     .hero-total {
-      background: linear-gradient(135deg, #7c3aed 0%, #a855f7 40%, #db2777 100%);
-      border-radius: 1.5rem;
-      padding: 1.6rem 1.25rem;
+      background: linear-gradient(135deg, #4c1d95 0%, #7c3aed 45%, #a855f7 100%);
+      border-radius: 1.35rem;
+      padding: 1.5rem 1.2rem;
       text-align: center;
       color: white;
-      margin-bottom: 1.35rem;
-      box-shadow: 0 16px 40px rgba(124,58,237,0.45);
+      margin-bottom: 1.25rem;
+      box-shadow: 0 12px 32px rgba(76,29,149,0.35);
       position: relative;
       overflow: hidden;
     }
     .hero-total::before {
       content: '';
-      position: absolute; top: -40%; right: -20%;
-      width: 60%; height: 120%;
-      background: radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 70%);
+      position: absolute; top: -40%; right: -15%;
+      width: 55%; height: 140%;
+      background: radial-gradient(circle, rgba(255,255,255,0.12) 0%, transparent 70%);
       pointer-events: none;
     }
     .hero-total .label {
-      font-size: 0.85rem; font-weight: 700; text-transform: uppercase;
-      letter-spacing: 0.08em; opacity: 0.9;
+      font-size: 0.8rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.1em; opacity: 0.9;
     }
     .hero-total .amount {
-      font-size: 2.75rem; font-weight: 900; margin: 0.35rem 0 0.15rem;
-      letter-spacing: -0.02em; text-shadow: 0 2px 12px rgba(0,0,0,0.15);
+      font-size: 2.6rem; font-weight: 900; margin: 0.3rem 0 0.1rem;
+      letter-spacing: -0.02em;
     }
-    .hero-total .sub {
-      font-size: 0.88rem; opacity: 0.85;
-    }
+    .hero-total .sub { font-size: 0.85rem; opacity: 0.85; }
 
-    /* ========== MEMBER CARDS ========== */
+    /* ========== MEMBER CARDS + AVATARS ========== */
     .balances {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(2, 1fr);
       gap: 0.75rem;
-      margin-bottom: 1.35rem;
+      margin-bottom: 1.25rem;
     }
     .bal-card {
-      border-radius: 1.2rem;
-      padding: 1.1rem 0.7rem;
+      border-radius: 1.15rem;
+      padding: 1.1rem 0.85rem;
       text-align: center;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.1);
       color: white;
       position: relative;
       overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.35rem;
     }
-    .bal-card.teresia {
-      background: linear-gradient(160deg, #7c3aed, #5b21b6);
+    .bal-card.teresia { background: linear-gradient(160deg, #7c3aed, #5b21b6); }
+    .bal-card.brayan  { background: linear-gradient(160deg, #059669, #047857); }
+    .bal-card.mary    { background: linear-gradient(160deg, #d97706, #b45309); }
+    .bal-card.dividends { background: linear-gradient(160deg, #0d9488, #0f766e); }
+    .avatar {
+      width: 48px; height: 48px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.25);
+      border: 2px solid rgba(255,255,255,0.5);
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 800; font-size: 1.05rem;
+      letter-spacing: 0.02em;
+      margin-bottom: 0.15rem;
     }
-    .bal-card.brayan {
-      background: linear-gradient(160deg, #059669, #047857);
-    }
-    .bal-card.mary {
-      background: linear-gradient(160deg, #d97706, #b45309);
-    }
-    .bal-card .name { font-weight: 800; font-size: 0.92rem; opacity: 0.95; }
-    .bal-card .amt { font-size: 1.35rem; font-weight: 900; margin: 0.35rem 0; }
+    .bal-card .name { font-weight: 800; font-size: 0.88rem; opacity: 0.95; }
+    .bal-card .amt { font-size: 1.3rem; font-weight: 900; }
     .bal-card a {
-      font-size: 0.75rem; color: rgba(255,255,255,0.95);
+      font-size: 0.72rem; color: rgba(255,255,255,0.95);
       font-weight: 600; cursor: pointer; text-decoration: underline;
       text-underline-offset: 2px;
     }
 
     /* ========== SECTIONS ========== */
     section {
-      border-radius: 1.25rem;
-      padding: 1.2rem 1.05rem;
-      margin-bottom: 1.2rem;
-      box-shadow: 0 8px 28px rgba(0,0,0,0.08);
-      border: none;
+      border-radius: 1.15rem;
+      padding: 1.15rem 1rem;
+      margin-bottom: 1.1rem;
+      box-shadow: 0 4px 18px rgba(0,0,0,0.05);
+      border: 1px solid #e2e8f0;
+      background: white;
     }
-    section.section-purple {
-      background: linear-gradient(165deg, #f5f3ff 0%, #ede9fe 50%, #fff 100%);
-      border-top: 5px solid #7c3aed;
-    }
-    section.section-pink {
-      background: linear-gradient(165deg, #fdf2f8 0%, #fce7f3 50%, #fff 100%);
-      border-top: 5px solid #db2777;
-    }
-    section.section-green {
-      background: linear-gradient(165deg, #ecfdf5 0%, #d1fae5 50%, #fff 100%);
-      border-top: 5px solid #059669;
-    }
-    section.section-orange {
-      background: linear-gradient(165deg, #fff7ed 0%, #ffedd5 50%, #fff 100%);
-      border-top: 5px solid #f97316;
-    }
-    section.section-blue {
-      background: linear-gradient(165deg, #eff6ff 0%, #dbeafe 50%, #fff 100%);
-      border-top: 5px solid #2563eb;
-    }
+    section.section-purple { border-top: 4px solid #7c3aed; }
+    section.section-green  { border-top: 4px solid #059669; }
     section h2 {
-      font-size: 1.05rem; margin-bottom: 0.95rem;
+      font-size: 1rem; margin-bottom: 0.9rem;
       display: flex; align-items: center; justify-content: space-between;
       flex-wrap: wrap; gap: 0.4rem;
+      color: #1e1b4b;
     }
-    section.section-purple h2 { color: #5b21b6; }
-    section.section-pink h2 { color: #9d174d; }
-    section.section-green h2 { color: #047857; }
-    section.section-orange h2 { color: #c2410c; }
-    section.section-blue h2 { color: #1d4ed8; }
-
     .badge {
-      font-size: 0.7rem; padding: 0.2rem 0.55rem; border-radius: 999px; font-weight: 700;
+      font-size: 0.68rem; padding: 0.18rem 0.5rem; border-radius: 999px; font-weight: 700;
     }
     .badge-purple { background: #ede9fe; color: #6d28d9; }
-    .badge-pink { background: #fce7f3; color: #be185d; }
-    .badge-green { background: #d1fae5; color: #047857; }
-    .badge-orange { background: #ffedd5; color: #c2410c; }
+    .badge-green  { background: #d1fae5; color: #047857; }
 
     .form-row {
-      display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: flex-end; margin-bottom: 0.5rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.65rem;
+      align-items: end;
     }
-    .form-row > div { flex: 1 1 95px; min-width: 85px; }
-    .form-row label { font-size: 0.72rem; margin-bottom: 0.18rem; }
-    .form-row input, .form-row select {
-      margin-bottom: 0; padding: 0.6rem 0.65rem; font-size: 0.92rem;
-    }
-    .form-row .btn { width: auto; padding: 0.6rem 1.15rem; font-size: 0.9rem; flex: 0 0 auto; }
+    .form-row > div { min-width: 0; }
+    .form-row .btn { margin-bottom: 1rem; }
 
-    table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
-    th, td { padding: 0.6rem 0.35rem; text-align: left; border-bottom: 1px solid rgba(0,0,0,0.06); }
-    th { font-weight: 700; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.03em; }
-    section.section-green th { color: #047857; }
-    section.section-blue th { color: #1d4ed8; }
-    section.section-orange th { color: #c2410c; }
-    .actions { display: flex; gap: 0.3rem; }
-    .actions button {
-      font-size: 0.72rem; padding: 0.28rem 0.5rem; border-radius: 0.4rem;
-      border: none; cursor: pointer; font-weight: 600;
+    table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+    th {
+      text-align: left; padding: 0.55rem 0.4rem;
+      font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.04em;
+      color: #64748b; border-bottom: 2px solid #e2e8f0;
+    }
+    td {
+      padding: 0.65rem 0.4rem;
+      border-bottom: 1px solid #f1f5f9;
+      vertical-align: middle;
+    }
+    tr:last-child td { border-bottom: none; }
+    .actions { white-space: nowrap; }
+    .btn-edit, .btn-del {
+      border: none; border-radius: 0.4rem; padding: 0.28rem 0.55rem;
+      font-size: 0.75rem; font-weight: 700; cursor: pointer; margin-left: 0.2rem;
     }
     .btn-edit { background: #ede9fe; color: #6d28d9; }
-    .btn-del { background: #fce7f3; color: #be185d; }
-    .empty { color: #a78bfa; font-style: italic; padding: 0.85rem 0; font-size: 0.9rem; }
+    .btn-del  { background: #fee2e2; color: #be123c; }
+    .empty { text-align: center; color: #94a3b8; padding: 1.25rem; font-size: 0.9rem; }
 
-    /* Statement hero */
-    .stmt-hero {
-      background: linear-gradient(135deg, #0d9488, #059669, #10b981);
-      border-radius: 1.4rem;
-      padding: 1.6rem 1.2rem;
-      text-align: center;
-      color: white;
-      margin-bottom: 1.25rem;
-      box-shadow: 0 14px 36px rgba(13,148,136,0.4);
+    /* Admin toolbar */
+    .admin-toolbar {
+      display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 0.75rem;
     }
-    .stmt-hero .name { font-size: 1.15rem; font-weight: 700; opacity: 0.95; }
-    .stmt-hero .total { font-size: 2.4rem; font-weight: 900; margin-top: 0.3rem; }
-    .stmt-hero .label { font-size: 0.85rem; opacity: 0.85; margin-top: 0.2rem; }
 
-    /* Modals */
-    .modal-bg {
-      position: fixed; inset: 0; background: rgba(30,27,75,0.5);
-      z-index: 100; display: flex; align-items: center; justify-content: center; padding: 1rem;
-      backdrop-filter: blur(4px);
+    /* ========== MODALS ========== */
+    .modal-overlay {
+      position: fixed; inset: 0; background: rgba(15,23,42,0.55);
+      display: flex; align-items: center; justify-content: center;
+      z-index: 100; padding: 1rem;
     }
     .modal {
-      background: white; border-radius: 1.5rem; padding: 1.6rem 1.4rem;
-      width: 100%; max-width: 370px;
-      box-shadow: 0 28px 56px rgba(0,0,0,0.3);
+      background: white; border-radius: 1.15rem;
+      padding: 1.5rem 1.25rem; width: 100%; max-width: 380px;
+      box-shadow: 0 25px 50px -12px rgba(0,0,0,0.3);
     }
-    .modal h2 { color: #5b21b6; margin-bottom: 1rem; font-size: 1.2rem; font-weight: 800; }
-    .modal .btn-row { display: flex; gap: 0.55rem; margin-top: 0.6rem; }
-    .modal .btn-row .btn { flex: 1; }
-    .btn-cancel {
-      background: linear-gradient(90deg, #e9d5ff, #f3e8ff) !important;
-      color: #6b21a8 !important; box-shadow: none !important;
-    }
+    .modal h3 { font-size: 1.1rem; margin-bottom: 1rem; color: #1e1b4b; }
+    .modal-actions { display: flex; gap: 0.5rem; margin-top: 0.5rem; }
+    .modal-actions .btn { flex: 1; }
 
-    @media (max-width: 440px) {
-      .balances { grid-template-columns: 1fr; }
-      .bal-card {
-        display: flex; justify-content: space-between; align-items: center;
-        text-align: left; padding: 0.95rem 1.15rem;
-      }
-      .bal-card .amt { margin: 0; }
-      .hero-total .amount { font-size: 2.2rem; }
+    /* STATEMENT */
+    #stmt-view header { background: linear-gradient(135deg, #0f766e, #0d9488); }
+    .stmt-summary {
+      background: white; border-radius: 1.15rem; padding: 1.25rem;
+      text-align: center; margin-bottom: 1.1rem;
+      box-shadow: 0 4px 18px rgba(0,0,0,0.05); border: 1px solid #e2e8f0;
+    }
+    .stmt-summary .name { font-weight: 800; font-size: 1.1rem; color: #0f766e; }
+    .stmt-summary .total { font-size: 2rem; font-weight: 900; margin-top: 0.25rem; color: #0f172a; }
+
+    @media (max-width: 520px) {
+      .balances { grid-template-columns: 1fr 1fr; }
+      .form-row { grid-template-columns: 1fr; }
+      .hero-total .amount { font-size: 2.15rem; }
+      .login-card { padding: 2rem 1.4rem; }
     }
   </style>
 </head>
@@ -330,21 +381,25 @@
 <!-- LOGIN -->
 <div id="login-view">
   <div class="login-card">
-    <div class="icon-3">3</div>
-    <div class="logo">BIG THREE</div>
-    <p class="subtitle">Contribution Circle · 10,000 / month</p>
+    <div class="login-brand">
+      <div class="icon-3">3</div>
+      <div class="logo">BIG THREE</div>
+      <div class="login-tagline">Savings · Growth · Future</div>
+      <p class="subtitle">Contribution Circle · 10,000 / month</p>
+    </div>
+    <div class="login-divider"></div>
     <div id="login-error" class="error hidden"></div>
-    <label for="login-user">Who are you?</label>
+    <label for="login-user">Member</label>
     <select id="login-user">
       <option value="" disabled selected>Select your name</option>
-      <option value="TERESIA">TERESIA</option>
-      <option value="BRAYAN">BRAYAN</option>
-      <option value="MARY">MARY</option>
+      <option value="TERESIA">Teresia</option>
+      <option value="BRAYAN">Brayan</option>
+      <option value="MARY">Mary</option>
     </select>
-    <label for="login-pass">Your password</label>
-    <input type="password" id="login-pass" placeholder="Enter password" autocomplete="current-password">
-    <button class="btn" onclick="doLogin()">Sign In</button>
-    <p class="members-hint">Teresia · Brayan · Mary</p>
+    <label for="login-pass">Password</label>
+    <input type="password" id="login-pass" placeholder="Enter your password" autocomplete="current-password">
+    <button class="btn" onclick="doLogin()">Sign In Securely</button>
+    <p class="members-hint">Private circle · Teresia · Brayan · Mary</p>
   </div>
 </div>
 
@@ -359,7 +414,12 @@
     </div>
   </header>
   <main>
-    <!-- TOTAL CONTRIBUTIONS (replaces payments) -->
+    <!-- Tagline -->
+    <div class="tagline-banner">
+      <span>Savings · Growth · Future</span>
+    </div>
+
+    <!-- TOTAL -->
     <div class="hero-total">
       <div class="label">Total Contributions</div>
       <div class="amount" id="stat-total">0</div>
@@ -370,14 +430,21 @@
 
     <div id="admin-forms" class="hidden">
       <section class="section-purple">
-        <h2>➕ Add Contribution <span class="badge badge-purple">Admin only</span></h2>
+        <h2>
+          ➕ Add Contribution
+          <span class="badge badge-purple">Admin only</span>
+        </h2>
+        <div class="admin-toolbar">
+          <button class="btn btn-sm btn-green" onclick="downloadExcel()">📥 Download Excel</button>
+        </div>
         <div class="form-row">
           <div>
-            <label>Member</label>
+            <label>Member / Category</label>
             <select id="c-member">
               <option value="TERESIA">TERESIA</option>
               <option value="BRAYAN">BRAYAN</option>
               <option value="MARY">MARY</option>
+              <option value="DIVIDENDS">DIVIDENDS</option>
             </select>
           </div>
           <div>
@@ -398,7 +465,10 @@
     </div>
 
     <section class="section-green">
-      <h2>📜 All Contributions <span class="badge badge-green" id="c-count">0</span></h2>
+      <h2>
+        📜 All Contributions
+        <span class="badge badge-green" id="c-count">0</span>
+      </h2>
       <div style="overflow-x:auto">
         <table>
           <thead>
@@ -423,69 +493,79 @@
   <header>
     <h1 id="stmt-title">Statement</h1>
     <div class="header-actions">
-      <button onclick="showDash()">← Dashboard</button>
+      <button onclick="showDash()">← Back</button>
     </div>
   </header>
   <main>
-    <div class="stmt-hero">
-      <div class="name" id="stmt-name"></div>
+    <div class="stmt-summary">
+      <div class="name" id="stmt-name">—</div>
       <div class="total" id="stmt-total">0</div>
-      <div class="label">Total contributed</div>
     </div>
-    <section class="section-blue">
-      <h2>Contribution history</h2>
+    <section class="section-green">
       <div style="overflow-x:auto">
         <table>
           <thead>
-            <tr><th>Date</th><th>Amount</th><th>Notes</th></tr>
+            <tr>
+              <th>Date</th>
+              <th>Amount</th>
+              <th>Notes</th>
+            </tr>
           </thead>
           <tbody id="stmt-tbody"></tbody>
         </table>
       </div>
-      <p class="empty hidden" id="stmt-empty">No contributions recorded.</p>
+      <p class="empty hidden" id="stmt-empty">No records yet.</p>
     </section>
   </main>
 </div>
 
-<!-- CHANGE PASSWORD -->
-<div id="pw-modal" class="modal-bg hidden">
+<!-- EDIT MODAL -->
+<div id="edit-modal" class="modal-overlay hidden">
   <div class="modal">
-    <h2>🔑 Change Password</h2>
-    <div id="pw-msg" class="hidden"></div>
-    <label>Current password</label>
-    <input type="password" id="pw-current">
-    <label>New password (min 6)</label>
-    <input type="password" id="pw-new">
-    <label>Confirm new password</label>
-    <input type="password" id="pw-confirm">
-    <div class="btn-row">
-      <button class="btn btn-cancel" onclick="hideChangePw()">Cancel</button>
-      <button class="btn" onclick="doChangePw()">Update</button>
+    <h3>Edit Contribution</h3>
+    <div id="edit-fields"></div>
+    <div class="modal-actions">
+      <button class="btn btn-outline btn-sm" onclick="hideEdit()">Cancel</button>
+      <button class="btn btn-sm" onclick="saveEdit()">Save</button>
     </div>
   </div>
 </div>
 
-<!-- EDIT -->
-<div id="edit-modal" class="modal-bg hidden">
+<!-- PASSWORD MODAL -->
+<div id="pw-modal" class="modal-overlay hidden">
   <div class="modal">
-    <h2 id="edit-title">Edit Contribution</h2>
-    <div id="edit-fields"></div>
-    <div class="btn-row">
-      <button class="btn btn-cancel" onclick="hideEdit()">Cancel</button>
-      <button class="btn" onclick="saveEdit()">Save</button>
+    <h3>Change Password</h3>
+    <div id="pw-msg" class="hidden"></div>
+    <label>Current password</label>
+    <input type="password" id="pw-current" autocomplete="current-password">
+    <label>New password</label>
+    <input type="password" id="pw-new" autocomplete="new-password">
+    <label>Confirm new password</label>
+    <input type="password" id="pw-confirm" autocomplete="new-password">
+    <div class="modal-actions">
+      <button class="btn btn-outline btn-sm" onclick="hideChangePw()">Cancel</button>
+      <button class="btn btn-sm" onclick="doChangePw()">Update</button>
     </div>
   </div>
 </div>
 
 <script>
 const MEMBERS = ["TERESIA", "BRAYAN", "MARY"];
+const ALL_CATEGORIES = ["TERESIA", "BRAYAN", "MARY", "DIVIDENDS"];
 const MONTHLY = 10000;
 const API = "/api";
 
-let session = null; // { user, role, token }
+const AVATAR_INITIALS = {
+  TERESIA: "T",
+  BRAYAN: "B",
+  MARY: "M",
+  DIVIDENDS: "D"
+};
+
+let session = null;
 let editCtx = null;
 let pollTimer = null;
-let cachedData = null; // last fetched public data
+let cachedData = null;
 
 function fmt(n) {
   return Number(n).toLocaleString("en-US", { maximumFractionDigits: 0 });
@@ -527,16 +607,13 @@ function startPolling() {
     if (!session) return;
     try {
       const data = await fetchData();
-      // only re-render if on dashboard
       if (!document.getElementById("dash-view").classList.contains("hidden")) {
         renderDash(data);
       }
     } catch (e) {
-      if (e.status === 401) {
-        doLogout(true);
-      }
+      if (e.status === 401) doLogout(true);
     }
-  }, 12000); // every 12s
+  }, 12000);
 }
 
 function stopPolling() {
@@ -572,10 +649,7 @@ async function doLogin() {
 function doLogout(silent) {
   stopPolling();
   if (session && session.token) {
-    fetch(API + "/logout", {
-      method: "POST",
-      headers: authHeaders()
-    }).catch(() => {});
+    fetch(API + "/logout", { method: "POST", headers: authHeaders() }).catch(() => {});
   }
   session = null;
   cachedData = null;
@@ -585,9 +659,7 @@ function doLogout(silent) {
   document.getElementById("dash-view").classList.add("hidden");
   document.getElementById("stmt-view").classList.add("hidden");
   document.getElementById("login-view").classList.remove("hidden");
-  if (!silent) {
-    document.getElementById("login-error").classList.add("hidden");
-  }
+  if (!silent) document.getElementById("login-error").classList.add("hidden");
 }
 
 async function showDash() {
@@ -619,7 +691,7 @@ function renderDash(db) {
   document.getElementById("c-date").value = today();
 
   const totals = {};
-  MEMBERS.forEach(m => (totals[m] = 0));
+  ALL_CATEGORIES.forEach(m => (totals[m] = 0));
   db.contributions.forEach(c => {
     totals[c.member] = (totals[c.member] || 0) + Number(c.amount);
   });
@@ -629,14 +701,15 @@ function renderDash(db) {
   document.getElementById("stat-count").textContent =
     db.contributions.length + " record" + (db.contributions.length !== 1 ? "s" : "");
 
-  document.getElementById("balances").innerHTML = MEMBERS.map(m => {
+  document.getElementById("balances").innerHTML = ALL_CATEGORIES.map(m => {
+    const isDividend = m === "DIVIDENDS";
     const canView = isAdmin() || session.user === m;
+    const initial = AVATAR_INITIALS[m] || m[0];
     return `<div class="bal-card ${m.toLowerCase()}">
-      <div>
-        <div class="name">${m}</div>
-        ${canView ? `<a onclick="showStatement('${m}')">View statement →</a>` : ""}
-      </div>
-      <div class="amt">${fmt(totals[m])}</div>
+      <div class="avatar">${initial}</div>
+      <div class="name">${isDividend ? "DIVIDENDS" : m}</div>
+      <div class="amt">${fmt(totals[m] || 0)}</div>
+      ${canView ? `<a onclick="showStatement('${m}')">View statement →</a>` : ""}
     </div>`;
   }).join("");
 
@@ -651,23 +724,15 @@ function renderDash(db) {
     const sorted = [...db.contributions].sort(
       (a, b) => b.date.localeCompare(a.date) || b.id - a.id
     );
-    cTbody.innerHTML = sorted
-      .map(
-        c => `<tr>
+    cTbody.innerHTML = sorted.map(c => `<tr>
       <td>${c.date}</td>
       <td><strong>${c.member}</strong></td>
       <td>${fmt(c.amount)}</td>
       <td>${c.notes || "—"}</td>
-      <td class="actions">${
-        isAdmin()
-          ? `
+      <td class="actions">${isAdmin() ? `
         <button class="btn-edit" onclick="openEdit(${c.id})">Edit</button>
-        <button class="btn-del" onclick="delContribution(${c.id})">Del</button>`
-          : ""
-      }</td>
-    </tr>`
-      )
-      .join("");
+        <button class="btn-del" onclick="delContribution(${c.id})">Del</button>` : ""}</td>
+    </tr>`).join("");
   }
 }
 
@@ -708,10 +773,9 @@ function openEdit(id) {
   if (!c) return;
   editCtx = id;
   document.getElementById("edit-fields").innerHTML = `
-    <label>Member</label>
-    <select id="e-member">${MEMBERS.map(
-      m =>
-        `<option value="${m}" ${m === c.member ? "selected" : ""}>${m}</option>`
+    <label>Member / Category</label>
+    <select id="e-member">${ALL_CATEGORIES.map(m =>
+      `<option value="${m}" ${m === c.member ? "selected" : ""}>${m}</option>`
     ).join("")}</select>
     <label>Amount</label>
     <input type="number" id="e-amount" value="${c.amount}" step="100">
@@ -748,6 +812,7 @@ async function saveEdit() {
 }
 
 async function showStatement(member) {
+  if (member === "DIVIDENDS" && !isAdmin()) return;
   if (!isAdmin() && session.user !== member) return;
   document.getElementById("dash-view").classList.add("hidden");
   document.getElementById("stmt-view").classList.remove("hidden");
@@ -755,11 +820,7 @@ async function showStatement(member) {
   document.getElementById("stmt-name").textContent = member;
 
   let db = cachedData;
-  try {
-    db = await fetchData();
-  } catch (e) {
-    /* use cache */
-  }
+  try { db = await fetchData(); } catch (e) {}
 
   const rows = (db.contributions || [])
     .filter(c => c.member === member)
@@ -773,15 +834,11 @@ async function showStatement(member) {
     empty.classList.remove("hidden");
   } else {
     empty.classList.add("hidden");
-    tbody.innerHTML = rows
-      .map(
-        r => `<tr>
+    tbody.innerHTML = rows.map(r => `<tr>
       <td>${r.date}</td>
       <td><strong>${fmt(r.amount)}</strong></td>
       <td>${r.notes || "—"}</td>
-    </tr>`
-      )
-      .join("");
+    </tr>`).join("");
   }
 }
 
@@ -830,7 +887,57 @@ async function doChangePw() {
   }
 }
 
-// Auto-login if token still valid
+/* ========== EXCEL DOWNLOAD (Admin) ========== */
+function downloadExcel() {
+  if (!isAdmin() || !cachedData) {
+    alert("Only admin can download, and data must be loaded.");
+    return;
+  }
+  if (typeof XLSX === "undefined") {
+    alert("Excel library not loaded. Check your internet connection.");
+    return;
+  }
+
+  const rows = cachedData.contributions || [];
+  const totals = {};
+  ALL_CATEGORIES.forEach(m => (totals[m] = 0));
+  rows.forEach(c => {
+    totals[c.member] = (totals[c.member] || 0) + Number(c.amount);
+  });
+  const grand = Object.values(totals).reduce((a, b) => a + b, 0);
+
+  // Sheet 1: All contributions
+  const detailData = [
+    ["Date", "Member / Category", "Amount", "Notes"],
+    ...rows
+      .slice()
+      .sort((a, b) => b.date.localeCompare(a.date) || b.id - a.id)
+      .map(c => [c.date, c.member, Number(c.amount), c.notes || ""])
+  ];
+
+  // Sheet 2: Summary
+  const summaryData = [
+    ["BIG THREE — Contributions Summary"],
+    ["Generated", new Date().toLocaleString()],
+    [],
+    ["Category", "Total"],
+    ...ALL_CATEGORIES.map(m => [m, totals[m] || 0]),
+    [],
+    ["GRAND TOTAL", grand],
+    [],
+    ["Number of records", rows.length]
+  ];
+
+  const wb = XLSX.utils.book_new();
+  const ws1 = XLSX.utils.aoa_to_sheet(detailData);
+  const ws2 = XLSX.utils.aoa_to_sheet(summaryData);
+  XLSX.utils.book_append_sheet(wb, ws2, "Summary");
+  XLSX.utils.book_append_sheet(wb, ws1, "All Contributions");
+
+  const filename = "BIG-THREE-Contributions-" + today() + ".xlsx";
+  XLSX.writeFile(wb, filename);
+}
+
 async function tryRestoreSession() {
   const token = localStorage.getItem("big3_token");
   const user = localStorage.getItem("big3_user");
@@ -856,8 +963,8 @@ if ("serviceWorker" in navigator) {
   navigator.serviceWorker.register("sw.js").catch(() => {});
 }
 
-// Boot
 tryRestoreSession();
 </script>
 </body>
 </html>
+
